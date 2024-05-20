@@ -1,66 +1,51 @@
-import PySimpleGUI as Sg
+import PySimpleGUI as sg
+import functions
 
-window = Sg.Window('Simple Calculator',
-                   layout=[[Sg.InputText("0", key='input_box', size=(31, 1))],
-                           [Sg.Button("+", size=(5, 2)),
-                            Sg.Button("*", size=(5, 2)),
-                            Sg.Button("/", size=(5, 2)),
-                            Sg.Button("-", size=(5, 2))],
-                           [Sg.Button("7", size=(5, 2)),
-                            Sg.Button("8", size=(5, 2)),
-                            Sg.Button("9", size=(5, 2)),
-                            Sg.Button("CE", size=(5, 2))],
-                           [Sg.Button("4", size=(5, 2)),
-                            Sg.Button("5", size=(5, 2)),
-                            Sg.Button("6", size=(5, 2)),
-                            Sg.Button("C", size=(5, 2))],
-                           [Sg.Button("1", size=(5, 2)),
-                            Sg.Button("2", size=(5, 2)),
-                            Sg.Button("3", size=(5, 2)),
-                            Sg.Button("=    ", size=(5, 2))]])
+First_Operand = None
+Operator = None
+Second_Operand = None
+Result = None
+
+
+layout = [[sg.InputText("", key='arith_ope', size=(31, 1), disabled=True)],
+          [sg.InputText("", key='input_box', size=(31, 1), disabled=True),]]
+
+buttons = [
+    ["7", "8", "9", "+"],
+    ["4", "5", "6", "*"],
+    ["3", "2", "1", "/"],
+    ["C", "0", "=", "-"]
+]
+
+for row in buttons:
+    row_layout = []
+    for button_label in row:
+        row_layout.append(sg.Button(button_label, size=(5, 2)))
+    layout.append(row_layout)
+
+window = sg.Window('Simple Calculator', layout)
 
 while True:
     event, values = window.read()
-    match event:
-        case "+":
-            window['input_box'].update(event)
-        case "*":
-            window['input_box'].update(event)
-        case "/":
-            window['input_box'].update(event)
-        case "-":
-            window['input_box'].update(event)
-        case "0":
-            ope1 = values['input_box'].strip()
-            ope1 += event
-            window['input_box'].update(ope1)
-        case "1":
-            ope1 = values['input_box'].strip()
-            ope1 += event
-            window['input_box'].update(ope1)
-        case "2":
-            ope1 = values['input_box'].strip()
-            ope1 += event
-            window['input_box'].update(ope1)
-        case "3":
-            ope1 = values['input_box'].strip()
-            ope1 += event
-            window['input_box'].update(ope1)
-        case "4":
-            window['input_box'].update(event)
-        case "5":
-            window['input_box'].update(event)
-        case "6":
-            window['input_box'].update(event)
-        case "7":
-            window['input_box'].update(event)
-        case "8":
-            window['input_box'].update(event)
-        case "9":
-            window['input_box'].update(event)
-        case Sg.WIN_CLOSED:
-            break
-    print(values)
-    print(event)
-    print(ope1)
+    num_symbols = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
+    arith_symbols = ["+", "-", "*", "/"]
+    if event in num_symbols:
+        functions.get_operands(window, values, event)
+    elif event in arith_symbols:
+        operand = values['input_box']
+        functions.display_operation(window, operand, event)
+    elif event == "=":
+        # Split first operand to operator
+        first_operand = values['arith_ope']
+        first_ope = first_operand[:-1].strip()
+        operator = first_operand[-1]
+
+        functions.solve_operation(window, first_ope, operator, values)
+    elif event == "C":
+        First_Operand = None
+        Second_Operand = None
+    elif event == sg.WIN_CLOSED:
+        break
+
+    
 window.close()

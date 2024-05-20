@@ -3,5 +3,5 @@
   <component name="Black">
     <option name="sdkName" value="Python 3.10 (calc)" />
   </component>
-  <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.10 (calc)" project-jdk-type="Python SDK" />
+  <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.10 (simple_calc)" project-jdk-type="Python SDK" />
 </project>
